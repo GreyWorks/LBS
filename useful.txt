@@ -1,0 +1,4 @@
+
+# Berechnung von Koordinaten nach Angabe von Abstand
+double  	latitudeNorthOf(double lat, double lon, double meters)
+double		longitudeEastOf(double lat, double lon, double meters)
