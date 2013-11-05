@@ -1,9 +1,15 @@
+
+import fu.geo.LatLongPosition;
 import fu.keys.LSIClassCentreDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Database {
 
@@ -31,10 +37,19 @@ public class Database {
             e.printStackTrace();
             System.exit(1);
         }
-
     }
 
-    public ResultSet query(String queryString) {
+    public void closeConnection() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            System.out.println("Error closing DB: " + e.toString());
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    private ResultSet query(String queryString) {
         try {
             Statement statement = connection.createStatement();
             statement.setFetchSize(1000);
@@ -47,13 +62,52 @@ public class Database {
         }
     }
 
-    public void closeConnection() {
+    public Map<Integer, Crossing> getCrossings(LatLongPosition northWest, LatLongPosition southEast) {
+        String queryString;
+        double smallLong;
+        double bigLong;
+        double smallLat;
+        double bigLat;
+        ResultSet resultSet = null;
+        HashMap<Integer, Crossing> crossings;
+        crossings = new HashMap<>();
+
+        if (northWest.getLongitude() < southEast.getLongitude()) {
+            smallLong = northWest.getLongitude();
+            bigLong = southEast.getLongitude();
+        } else {
+            bigLong = northWest.getLongitude();
+            smallLong = southEast.getLongitude();
+        }
+
+        if (northWest.getLatitude() < southEast.getLatitude()) {
+            smallLat = northWest.getLatitude();
+            bigLat = southEast.getLatitude();
+        } else {
+            bigLat = northWest.getLatitude();
+            smallLat = southEast.getLatitude();
+        }
+
+        queryString = String.format("SELECT id,long,lat FROM crossing WHERE"
+                + " long BETWEEN %f AND %f AND lat BETWEEN %f AND %f",
+                smallLong, bigLong, smallLat, bigLat);
+
+        resultSet = this.query(queryString);
         try {
-            this.connection.close();
+            while (resultSet.next()) {
+                int db_id = (int) resultSet.getLong(1);
+                double db_lat = resultSet.getDouble(3);
+                double db_long = resultSet.getDouble(2);
+                crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
+            }
+
+            resultSet.close();
         } catch (SQLException e) {
-            System.out.println("Error closing DB: " + e.toString());
+            System.out.println("Error query DB: " + e.toString());
             e.printStackTrace();
             System.exit(1);
         }
+        
+        return crossings;
     }
 }

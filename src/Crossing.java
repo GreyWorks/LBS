@@ -1,4 +1,5 @@
 
+import fu.geo.LatLongPosition;
 import java.util.ArrayList;
 
 /**
@@ -8,39 +9,21 @@ import java.util.ArrayList;
  */
 public class Crossing {
     ArrayList<Link> links;
-    private double lat;
-    private double lon;
-    
+    private LatLongPosition position;
+        
     public Crossing(double latitude, double longtitude) {
-        this.lat = latitude;
-        this.lon = longtitude;
+        this.position = new LatLongPosition(latitude, longtitude);
+    }
+    
+    public Crossing (LatLongPosition position) {
+        this.position = new LatLongPosition(position);
     }
 
     /**
-     * @return the lat
+     * @return the position
      */
-    public double getLat() {
-        return lat;
+    public LatLongPosition getPosition() {
+        return new LatLongPosition(position);
     }
 
-    /**
-     * @param lat the lat to set
-     */
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    /**
-     * @return the lon
-     */
-    public double getLon() {
-        return lon;
-    }
-
-    /**
-     * @param lon the lon to set
-     */
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
 }
