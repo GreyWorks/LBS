@@ -1,11 +1,6 @@
 
 import fu.geo.LatLongPosition;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /*import java.io.File;
  import java.io.FileWriter;
  import java.io.IOException;
@@ -35,6 +30,7 @@ public class Main {
         db.openConnection();
 
         Map<Integer, Crossing> crossings = db.getCrossings(areaBox);
+        db.getLinks(areaBox);
 
         /*File testOutput = new File("/tmp/paint.txt");
          FileWriter writer = null;

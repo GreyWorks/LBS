@@ -1,5 +1,4 @@
 
-import fu.geo.LatLongPosition;
 import fu.keys.LSIClassCentreDB;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -62,21 +61,17 @@ public class Database {
 
     public Map<Integer, Crossing> getCrossings(AreaBox box) {
         String queryString;
-        double smallLong;
-        double bigLong;
-        double smallLat;
-        double bigLat;
         ResultSet resultSet = null;
         HashMap<Integer, Crossing> crossings;
         crossings = new HashMap<>();
 
         queryString = String.format("SELECT id,long,lat FROM crossing WHERE"
-                + box.getSqlBetweenStatement());
+                + box.getSqlBetweenStatement("long", "lat"));
 
         resultSet = this.query(queryString);
         try {
             while (resultSet.next()) {
-                int db_id = (int) resultSet.getLong(1);
+                int db_id = resultSet.getInt(1);
                 double db_lat = resultSet.getDouble(3);
                 double db_long = resultSet.getDouble(2);
                 crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
@@ -92,21 +87,27 @@ public class Database {
         return crossings;
     }
 
-    /*public Map<Integer, Link> getLinks(AreaBox box) {
+    public Map<Integer, Link> getLinks(AreaBox box) {
+        String queryString;
         ResultSet resultSet = null;
         HashMap<Integer, Link> links;
-        String queryString;
+        links = new HashMap<>();
+        
 
-        queryString = String.format("SELECT id, crossing_id_from, crossing_id_to, meters, lsiclass, tag, maxspeed FROM link WHERE"
-                + box.getSqlBetweenStatement());
+        queryString = String.format("SELECT id, crossing_id_from, crossing_id_to, meters, lsiclass, tag, maxspeed, long_from, lat_from FROM link WHERE"
+                + box.getSqlBetweenStatement("long_from", "lat_from"));
 
         resultSet = this.query(queryString);
         try {
             while (resultSet.next()) {
-                int db_id = (int) resultSet.getLong(1);
-                double db_lat = resultSet.getDouble(3);
-                double db_long = resultSet.getDouble(2);
-                crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
+                int db_id = resultSet.getInt(1);
+                long db_crossingFrom = resultSet.getLong(2);
+                long db_crossingTo = resultSet.getLong(3);
+                int db_meters = resultSet.getInt(4);
+                int db_lsiClass = resultSet.getInt(5);
+                String db_tag = resultSet.getString(6);
+                int db_maxspeed = resultSet.getInt(7);
+              //  crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
             }
 
             resultSet.close();
@@ -117,5 +118,5 @@ public class Database {
         }
 
         return links;
-    }*/
+    }
 }
