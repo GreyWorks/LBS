@@ -62,7 +62,7 @@ public class Database {
         }
     }
 
-    public Map<Integer, Crossing> getCrossings(LatLongPosition northWest, LatLongPosition southEast) {
+    public Map<Integer, Crossing> getCrossings(AreaBox box) {
         String queryString;
         double smallLong;
         double bigLong;
@@ -72,25 +72,11 @@ public class Database {
         HashMap<Integer, Crossing> crossings;
         crossings = new HashMap<>();
 
-        if (northWest.getLongitude() < southEast.getLongitude()) {
-            smallLong = northWest.getLongitude();
-            bigLong = southEast.getLongitude();
-        } else {
-            bigLong = northWest.getLongitude();
-            smallLong = southEast.getLongitude();
-        }
-
-        if (northWest.getLatitude() < southEast.getLatitude()) {
-            smallLat = northWest.getLatitude();
-            bigLat = southEast.getLatitude();
-        } else {
-            bigLat = northWest.getLatitude();
-            smallLat = southEast.getLatitude();
-        }
-
+        LatLongPosition smallValues = box.getPosSmallValues();
+        LatLongPosition largeValues = box.getPosLargeValues();
         queryString = String.format("SELECT id,long,lat FROM crossing WHERE"
                 + " long BETWEEN %f AND %f AND lat BETWEEN %f AND %f",
-                smallLong, bigLong, smallLat, bigLat);
+                smallValues.getLongitude(), largeValues.getLongitude(), smallValues.getLatitude(), largeValues.getLatitude());
 
         resultSet = this.query(queryString);
         try {
