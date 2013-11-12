@@ -8,8 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Database {
 
@@ -72,11 +70,8 @@ public class Database {
         HashMap<Integer, Crossing> crossings;
         crossings = new HashMap<>();
 
-        LatLongPosition smallValues = box.getPosSmallValues();
-        LatLongPosition largeValues = box.getPosLargeValues();
         queryString = String.format("SELECT id,long,lat FROM crossing WHERE"
-                + " long BETWEEN %f AND %f AND lat BETWEEN %f AND %f",
-                smallValues.getLongitude(), largeValues.getLongitude(), smallValues.getLatitude(), largeValues.getLatitude());
+                + box.getSqlBetweenStatement());
 
         resultSet = this.query(queryString);
         try {
@@ -93,7 +88,34 @@ public class Database {
             e.printStackTrace();
             System.exit(1);
         }
-        
+
         return crossings;
     }
+
+    /*public Map<Integer, Link> getLinks(AreaBox box) {
+        ResultSet resultSet = null;
+        HashMap<Integer, Link> links;
+        String queryString;
+
+        queryString = String.format("SELECT id, crossing_id_from, crossing_id_to, meters, lsiclass, tag, maxspeed FROM link WHERE"
+                + box.getSqlBetweenStatement());
+
+        resultSet = this.query(queryString);
+        try {
+            while (resultSet.next()) {
+                int db_id = (int) resultSet.getLong(1);
+                double db_lat = resultSet.getDouble(3);
+                double db_long = resultSet.getDouble(2);
+                crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
+            }
+
+            resultSet.close();
+        } catch (SQLException e) {
+            System.out.println("Error query DB: " + e.toString());
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return links;
+    }*/
 }

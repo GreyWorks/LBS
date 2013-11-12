@@ -46,4 +46,10 @@ public class AreaBox {
     public LatLongPosition getPosLargeValues() {
         return posLargeValues;
     }
+    
+    public String getSqlBetweenStatement() {
+        return String.format(" long BETWEEN %f AND %f AND lat BETWEEN %f AND %f",
+                posSmallValues.getLongitude(), posLargeValues.getLongitude(),
+                posSmallValues.getLatitude(), posLargeValues.getLatitude());
+    }
 }
