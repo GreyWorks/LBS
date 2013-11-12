@@ -59,10 +59,10 @@ public class Database {
         }
     }
 
-    public Map<Integer, Crossing> getCrossings(AreaBox box) {
+    public Map<Long, Crossing> getCrossings(AreaBox box) {
         String queryString;
         ResultSet resultSet = null;
-        HashMap<Integer, Crossing> crossings;
+        HashMap<Long, Crossing> crossings;
         crossings = new HashMap<>();
 
         queryString = String.format("SELECT id,long,lat FROM crossing WHERE"
@@ -71,10 +71,10 @@ public class Database {
         resultSet = this.query(queryString);
         try {
             while (resultSet.next()) {
-                int db_id = resultSet.getInt(1);
+                long db_id = resultSet.getLong(1);
                 double db_lat = resultSet.getDouble(3);
                 double db_long = resultSet.getDouble(2);
-                crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
+                crossings.put(new Long(db_id), new Crossing(db_lat, db_long));
             }
 
             resultSet.close();
@@ -87,12 +87,11 @@ public class Database {
         return crossings;
     }
 
-    public Map<Integer, Link> getLinks(AreaBox box) {
+    public Map<Long, Link> getLinks(AreaBox box) {
         String queryString;
         ResultSet resultSet = null;
-        HashMap<Integer, Link> links;
+        HashMap<Long, Link> links;
         links = new HashMap<>();
-        
 
         queryString = String.format("SELECT id, crossing_id_from, crossing_id_to, meters, lsiclass, tag, maxspeed, long_from, lat_from FROM link WHERE"
                 + box.getSqlBetweenStatement("long_from", "lat_from"));
@@ -100,14 +99,16 @@ public class Database {
         resultSet = this.query(queryString);
         try {
             while (resultSet.next()) {
-                int db_id = resultSet.getInt(1);
+                long db_id = resultSet.getLong(1);
                 long db_crossingFrom = resultSet.getLong(2);
                 long db_crossingTo = resultSet.getLong(3);
                 int db_meters = resultSet.getInt(4);
                 int db_lsiClass = resultSet.getInt(5);
                 String db_tag = resultSet.getString(6);
                 int db_maxspeed = resultSet.getInt(7);
-              //  crossings.put(new Integer(db_id), new Crossing(db_lat, db_long));
+                if (!db_tag.equalsIgnoreCase("C")) {
+                    links.put(new Long(db_id), new Link(db_crossingFrom, db_crossingTo, db_meters, db_lsiClass, db_maxspeed));
+                }
             }
 
             resultSet.close();

@@ -29,8 +29,15 @@ public class Main {
         Database db = new Database(dbhost, dbport, dbuser, dbpasswd, dbname);
         db.openConnection();
 
-        Map<Integer, Crossing> crossings = db.getCrossings(areaBox);
-        db.getLinks(areaBox);
+        Map<Long,Crossing> crossings = db.getCrossings(areaBox);
+        Map<Long,Link> links = db.getLinks(areaBox);
+        
+        System.out.println("vorher");
+        for (Link l : links.values()) {
+            l.setCrossingReferences(crossings);
+        }
+        System.out.println("nachher");
+              
 
         /*File testOutput = new File("/tmp/paint.txt");
          FileWriter writer = null;

@@ -8,11 +8,13 @@ import java.util.ArrayList;
  * 
  */
 public class Crossing {
-    ArrayList<Link> links;
     private LatLongPosition position;
+    
+    public ArrayList<Link> outgoingLinks;
         
     public Crossing(double latitude, double longtitude) {
         this.position = new LatLongPosition(latitude, longtitude);
+        this.outgoingLinks = new ArrayList<>();
     }
     
     public Crossing (LatLongPosition position) {
