@@ -14,7 +14,7 @@ public class Crossing {
         
     public Crossing(double latitude, double longtitude) {
         this.position = new LatLongPosition(latitude, longtitude);
-        this.outgoingLinks = new ArrayList<>();
+        this.outgoingLinks = new ArrayList<Link>();
     }
     
     public Crossing (LatLongPosition position) {

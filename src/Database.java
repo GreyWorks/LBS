@@ -63,7 +63,7 @@ public class Database {
         String queryString;
         ResultSet resultSet = null;
         HashMap<Long, Crossing> crossings;
-        crossings = new HashMap<>();
+        crossings = new HashMap<Long, Crossing>();
 
         queryString = String.format("SELECT id,long,lat FROM crossing WHERE"
                 + box.getSqlBetweenStatement("long", "lat"));
@@ -91,7 +91,7 @@ public class Database {
         String queryString;
         ResultSet resultSet = null;
         HashMap<Long, Link> links;
-        links = new HashMap<>();
+        links = new HashMap<Long, Link>();
 
         queryString = String.format("SELECT id, crossing_id_from, crossing_id_to, meters, lsiclass, tag, maxspeed, long_from, lat_from FROM link WHERE"
                 + box.getSqlBetweenStatement("long_from", "lat_from"));

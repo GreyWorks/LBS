@@ -1,4 +1,6 @@
 
+import java.util.Locale;
+
 import fu.geo.LatLongPosition;
 
 public class AreaBox {
@@ -48,7 +50,7 @@ public class AreaBox {
     }
     
     public String getSqlBetweenStatement(String long_name, String lat_name) {
-        return String.format(" %s BETWEEN %f AND %f AND %s BETWEEN %f AND %f",
+        return String.format(Locale.ENGLISH," %s BETWEEN %.16f AND %.16f AND %s BETWEEN %.16f AND %.16f",
                 long_name, posSmallValues.getLongitude(), posLargeValues.getLongitude(),
                 lat_name, posSmallValues.getLatitude(), posLargeValues.getLatitude());
     }
