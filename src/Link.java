@@ -1,10 +1,6 @@
 
 import java.util.Map;
 
-/**
- *
- * @author Simon Roehrl
- */
 public class Link {
     private Crossing from;
     private Crossing to;
@@ -12,19 +8,25 @@ public class Link {
     private long from_id;
     private long to_id;
     
+    // TODO length und speed muss nicht unbedingt gespeichert werden, time reicht aus
     /**
      * in meters
      */
     private int length;
-    private int lsiclass;
-    private int maxspeed;
+    private int speed;
+    /**
+     * in seconds
+     */
+    private double time;
         
     public Link(long from_id, long to_id, int length, int lsiclass, int maxspeed) {
         this.from_id = from_id;
         this.to_id = to_id;
         this.length = length;
-        this.lsiclass = lsiclass;
-        this.maxspeed = maxspeed;
+        int lsiSpeed = LSISpeed.getSpeedById(lsiclass);
+        this.speed = maxspeed < lsiSpeed ? maxspeed : lsiSpeed;
+        this.time = (double) this.length / (this.speed * 1000 / 60 / 60 );
+        
         
     }
     

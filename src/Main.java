@@ -18,6 +18,8 @@ public class Main {
         LatLongPosition large = areaBox.getPosLargeValues();
         System.out.println("lat: " + small.getLatitude() + " long: " + small.getLongitude());
         System.out.println("lat: " + large.getLatitude() + " long: " + large.getLongitude());
+        
+        LSISpeed.init();
 
         String dbhost = "geo.informatik.fh-nuernberg.de";
         int dbport = 5432;

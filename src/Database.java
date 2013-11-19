@@ -106,7 +106,8 @@ public class Database {
                 int db_lsiClass = resultSet.getInt(5);
                 String db_tag = resultSet.getString(6);
                 int db_maxspeed = resultSet.getInt(7);
-                if (!db_tag.equalsIgnoreCase("C")) {
+                // keine Einbahnstrassen und nur Autostrassen hinzufuegen
+                if (!db_tag.equalsIgnoreCase("C") && (db_lsiClass / 100000 == 341)) {
                     links.put(new Long(db_id), new Link(db_crossingFrom, db_crossingTo, db_meters, db_lsiClass, db_maxspeed));
                 }
             }
