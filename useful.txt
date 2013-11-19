@@ -2,3 +2,32 @@
 # Berechnung von Koordinaten nach Angabe von Abstand
 double  	latitudeNorthOf(double lat, double lon, double meters)
 double		longitudeEastOf(double lat, double lon, double meters)
+
+
+
+fuer uns relevanten lsi-klassen: 
+
+ 34100000 | 34199999 |     5 | KRAFTFAHRZEUGSTRASSEN                        | Kraftfahrzeugstraßen (unspezifiziert)
+ 34110000 | 34119999 |     4 | AUTOBAHN                                     | Autobahn
+ 34120000 | 34129999 |     4 | KRAFTFAHRSTRASSE                             | Kraftfahrstraße
+ 34130000 | 34139999 |     4 | LANDSTRASSE                                  | Landstraße (unspezifiziert)
+ 34131000 | 34131999 |     3 | BUNDESSTRASSE                                | Bundesstraße
+ 34132000 | 34132999 |     3 | LANDSTRASSE_SEKUNDAER                        | Landstraße (sekundär)
+ 34133000 | 34133999 |     3 | LANDSTRASSE_TERTIAER                         | Landstraße (tertiär)
+ 34134000 | 34134999 |     3 | LANDSTRASSE_UNKLASSIFIZIERT                  | Landstraße (unklassifiziert)
+ 34140000 | 34149999 |     4 | INNERORTSTRASSE_ALL                          | Innerortstraße (unspezifiziert)
+ 34141000 | 34141999 |     3 | INNERORTSTRASSE                              | Innerortstraße
+ 34142000 | 34142999 |     3 | VERKEHRSBERUHIGTER_BEREICH                   | Verkehrsberuhigter Bereich
+ 34143000 | 34143999 |     3 | ERSCHLIESSUNGSWEG                            | Erschließungsweg
+ 34143100 | 34143199 |     2 | ZUFAHRT                                      | Zufahrt
+ 34143200 | 34143299 |     2 | PARKPLATZWEG                                 | Parkplatzweg
+ 34150000 | 34159999 |     4 | FELD_WALD_WEG                                | Feld- und Waldweg
+ 34160000 | 34169999 |     4 | FELD_WALD_WEG_HISTORISCH                     | Feld- und Waldweg (historisch)
+ 34170000 | 34179999 |     4 | KREUZUNGEN_KREISEL_AUFFAHRTEN                | Kreuzungen, Kreisel, Auffahrten (unspezifiziert)
+ 34171000 | 34171999 |     3 | ANSCHLUSSSTELLE_AUTOBAHN                     | Anschlussstelle (Autobahn)
+ 34172000 | 34172999 |     3 | ANSCHLUSSSTELLE_KRAFTFAHRSTRASSE             | Anschlussstelle (Kraftfahrstraße)
+ 34173000 | 34173999 |     3 | ANSCHLUSSSTELLE_BUNDESSTRASSE                | Anschlussstelle (Bundesstraße)
+ 34174000 | 34174999 |     3 | ANSCHLUSSSTELLE_SEKUNDAER                    | Anschlussstelle (sekundär)
+ 34175000 | 34175999 |     3 | ANSCHLUSSSTELLE_TERTIAER                     | Anschlussstelle (tertiär)
+ 34176000 | 34176999 |     3 | KREISVERKEHR                                 | Kreisverkehr
+
