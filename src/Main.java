@@ -1,12 +1,12 @@
 
 import fu.geo.LatLongPosition;
-import java.util.List;
 import java.util.Map;
 import java.io.File;
- import java.io.FileWriter;
- import java.io.IOException;
- import java.util.logging.Level;
- import java.util.logging.Logger;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
 
@@ -14,7 +14,7 @@ public class Main {
 
 
         // DEBUG test generating start box
-        AreaBox areaBox = getAreaBox(new LatLongPosition(49.458167, 11.10222), 3, 50);
+        AreaBox areaBox = getAreaBox(new LatLongPosition(49.458167, 11.10222), 10, 100);
         LatLongPosition small = areaBox.getPosSmallValues();
         LatLongPosition large = areaBox.getPosLargeValues();
         System.out.println("lat: " + small.getLatitude() + " long: " + small.getLongitude());
@@ -40,62 +40,47 @@ public class Main {
         }
         System.out.println("nachher");
         Crossing startCrossing = crossings.get(new Long(3722135));
-System.out.println("startalgo");
-        List<Crossing> result = Algo.calculate(crossings.values(), links.values(), startCrossing, 90);
-System.out.println("stopalgo");
+        
+        long startTime = System.nanoTime();
+        System.out.println("startalgo");
+        HashSet<Crossing> result = Algo.calculate(crossings.values(), links.values(), startCrossing, 700);
+        System.out.println("stopalgo, elapsed time (mikroseconds):" + (System.nanoTime() - startTime)/1000);
 
         File testOutput = new File("/tmp/paint.txt");
-         FileWriter writer = null;
-         try {
-         writer = new FileWriter(testOutput);
-         writer.write("POSITIONS rad=5 col=0,255,0,255\n");
-         } catch (IOException ex) {
-         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
-        
-         for (Crossing crossing :crossings.values()){
-         try {
-         writer.write(String.format("%f,%f\n", crossing.getPosition().getLongitude(), crossing.getPosition().getLatitude()));
-         } catch (IOException ex) {
-         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         }
+        FileWriter writer = null;
         try {
-            writer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-         
-         File testOutput2 = new File("/tmp/paint_result.txt");
-         FileWriter writer2 = null;
-         try {
-         writer2 = new FileWriter(testOutput2);
-         writer2.write("POSITIONS rad=5 col=0,255,0,255\n");
-         } catch (IOException ex) {
-         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
-        
-         for (Crossing crossing :result){
-         try {
-         writer2.write(String.format("%f,%f\n", crossing.getPosition().getLongitude(), crossing.getPosition().getLatitude()));
-         } catch (IOException ex) {
-         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         }
-        try {
-            writer2.close();
+            writer = new FileWriter(testOutput);
+            writer.write("POSITIONS rad=5 col=0,255,0,255\n");
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        for (Crossing crossing : crossings.values()) {
+            try {
+                writer.write(String.format("%f,%f\n", crossing.getPosition().getLongitude(), crossing.getPosition().getLatitude()));
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
+        File testOutput2 = new File("/tmp/paint_result.txt");
+        FileWriter writer2 = null;
+        try {
+            writer2 = new FileWriter(testOutput2);
+            writer2.write("POSITIONS rad=5 col=0,255,0,255\n");
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (Crossing crossing : result) {
+            try {
+                writer2.write(String.format("%f,%f\n", crossing.getPosition().getLongitude(), crossing.getPosition().getLatitude()));
+            } catch (IOException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         db.closeConnection();
-
-
     }
 
     /**

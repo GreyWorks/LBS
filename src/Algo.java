@@ -2,12 +2,11 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 public class Algo {
 
-    public static List<Crossing> calculate(Collection<Crossing> crossings, Collection<Link> links, Crossing startCrossing, double time) {
-        ArrayList<Crossing> resultList = new ArrayList<Crossing>();
+    public static HashSet<Crossing> calculate(Collection<Crossing> crossings, Collection<Link> links, Crossing startCrossing, double time) {
+        HashSet<Crossing> resultList = new HashSet<Crossing>();
         HashSet<Crossing> newOpenList;
         HashSet<Crossing> openList = new HashSet<Crossing>();
 
@@ -18,7 +17,6 @@ public class Algo {
         while (!openList.isEmpty()) {
             newOpenList = new HashSet<Crossing>();
             for (Crossing openCrossing : openList) {
-                System.out.println(openCrossing.getRemainingTime());
                 for (Link link : openCrossing.outgoingLinks) {
                     if (!link.getTargetCrossing().wasVisited()) {
                         if (openCrossing.getRemainingTime() - link.getTime() < 0) {
@@ -27,30 +25,32 @@ public class Algo {
                             link.getTargetCrossing().setRemainingTime(openCrossing.getRemainingTime() - link.getTime());
                             link.getTargetCrossing().setVisited(true);
                             newOpenList.add(link.getTargetCrossing());
-                            //resultList.add(link.getTargetCrossing());
+                            resultList.add(link.getTargetCrossing()); // punkte in der mitte werden auch addiert
                         }
                     } else {
-                        // if ersetzen mit updateTimeIfGreater //größere Restzeit setzen
                         if (link.getTargetCrossing().getRemainingTime() < openCrossing.getRemainingTime() - link.getTime()) {
                             //update
                             link.getTargetCrossing().setRemainingTime(openCrossing.getRemainingTime() - link.getTime());
 
-                            //den durchgang nochmal neu machen, solange 
-                            //newOpenList.clear();
+                            //den durchgang nochmal neu machen, solange bis kein schnellerer weg mehr gefunden wird
+                            
+                            //rollback bei allen in diesem durchlauf besuchten
                             for (Crossing cro : newOpenList) {
                                 cro.setVisited(false);
                             }
+                            //der aktualisierte, bleibt aber besucht
+                            link.getTargetCrossing().setVisited(true);
                             newOpenList = openList;
                             openList = null;
                             break;
                         }
                     }
                 }
-                if (openList == null)
+                if (openList == null) {
                     break;
+                }
             }
             openList = newOpenList;
-            //delete newOpenList hier, oder vorher werte kopieren, dann kann immer dieselbe liste verwedet werden
         }
 
         return resultList;
