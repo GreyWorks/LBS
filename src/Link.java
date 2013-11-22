@@ -7,7 +7,6 @@ public class Link {
     private Crossing to;
     private long from_id;
     private long to_id;
-
     // TODO length und speed muss nicht unbedingt gespeichert werden, time reicht aus
     /**
      * in meters
@@ -23,7 +22,13 @@ public class Link {
         this.from_id = from_id;
         this.to_id = to_id;
         this.length = length;
-        int lsiSpeed = LSISpeed.getSpeedById(lsiclass);
+        int lsiSpeed = 0;
+        try {
+            lsiSpeed = LSISpeed.getSpeedById(lsiclass);
+        } catch (Exception e) {
+            System.out.println("LSIClass not in List: " + lsiclass);
+            System.exit(1);
+        }
 
         if (maxspeed != 0 && maxspeed < lsiSpeed) {
             this.speed = maxspeed;

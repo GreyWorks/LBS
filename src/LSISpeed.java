@@ -13,6 +13,7 @@ public class LSISpeed {
     public static void init() {
         lsiSpeedMap.put(new Integer(34110000), new Integer(110)); // autobahn
         lsiSpeedMap.put(new Integer(34120000), new Integer(90)); // kraftfahrstrasse
+        lsiSpeedMap.put(new Integer(34130000), new Integer(65)); // landstrasse unspezifiziert
         lsiSpeedMap.put(new Integer(34131000), new Integer(80)); // bundesstrasse
         lsiSpeedMap.put(new Integer(34132000), new Integer(60)); // landstrasse sekundaer
         lsiSpeedMap.put(new Integer(34133000), new Integer(70)); // landstrasse tertiaer
