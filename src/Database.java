@@ -49,7 +49,8 @@ public class Database {
     private ResultSet query(String queryString) {
         try {
             Statement statement = connection.createStatement();
-            statement.setFetchSize(1000);
+            statement.setFetchSize(20000);
+            
             return statement.executeQuery(queryString);
         } catch (SQLException e) {
             System.out.println("Error query DB: " + e.toString());
