@@ -35,8 +35,11 @@ public class DijkstraAlgo implements ReachableAlgo {
                     l.getTargetCrossing().setRemainingTime(newRemainingTime);
                 }
                 if (l.getTargetCrossing().getRemainingTime() <= time) {
-                    openList.add(l.getTargetCrossing());
-                    Collections.sort(openList);
+                    if (!l.getTargetCrossing().wasVisited()) {
+                        l.getTargetCrossing().setVisited(true);
+                        openList.add(l.getTargetCrossing());
+                        Collections.sort(openList);
+                    }
                 }
             }
         }
