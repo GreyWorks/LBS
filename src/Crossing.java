@@ -2,7 +2,7 @@
 import fu.geo.LatLongPosition;
 import java.util.ArrayList;
 
-public class Crossing {
+public class Crossing implements Comparable<Crossing> {
     private LatLongPosition position;
     
     /**
@@ -57,6 +57,19 @@ public class Crossing {
      */
     public void setRemainingTime(double remainingTime) {
         this.remainingTime = remainingTime;
+    }
+
+    @Override
+    public int compareTo(Crossing o) {
+        if(this.getRemainingTime() < o.getRemainingTime()) {
+            return -1;
+        }
+        else if (this.getRemainingTime() > o.getRemainingTime()) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
 }

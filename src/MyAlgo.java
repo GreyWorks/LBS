@@ -2,10 +2,11 @@
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
-public class Algo {
+public class MyAlgo implements ReachableAlgo{
 
-    public static HashSet<Crossing> calculate(Collection<Crossing> crossings, Collection<Link> links, Crossing startCrossing, double time) {
+    public Set<Crossing> calculate(Collection<Crossing> crossings, Collection<Link> links, Crossing startCrossing, double time) {
         HashSet<Crossing> resultList = new HashSet<Crossing>();
         HashSet<Crossing> newOpenList;
         HashSet<Crossing> openList = new HashSet<Crossing>();

@@ -1,5 +1,6 @@
 
 import fu.geo.LatLongPosition;
+import fu.util.ConcaveHullGenerator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,16 +12,18 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 
         // DEBUG test generating start box
-        AreaBox areaBox = getAreaBox(new LatLongPosition(49.458167, 11.10222), 10, 100);
+        LatLongPosition startPosition = new LatLongPosition(49.481689, 11.115951);
+        AreaBox areaBox = getAreaBox(startPosition, 10, 50);
         LatLongPosition small = areaBox.getPosSmallValues();
         LatLongPosition large = areaBox.getPosLargeValues();
         System.out.println("lat: " + small.getLatitude() + " long: " + small.getLongitude());
@@ -45,29 +48,40 @@ public class Main {
             l.setCrossingReferences(crossings);
         }
         System.out.println("nachher");
-        Crossing startCrossing = crossings.get(new Long(3722135));
-        
+        Crossing startCrossing = Main.findStartCrossing(startPosition, crossings);
+
+        ReachableAlgo algo = new MyAlgo();
         long startTime = System.nanoTime();
         System.out.println("startalgo");
-        HashSet<Crossing> result = Algo.calculate(crossings.values(), links.values(), startCrossing, 700);
-        System.out.println("stopalgo, elapsed time (mikroseconds):" + (System.nanoTime() - startTime)/1000);
+        Set<Crossing> result = algo.calculate(crossings.values(), links.values(), startCrossing, 400);
+        System.out.println("stopalgo, elapsed time (mikroseconds):" + (System.nanoTime() - startTime) / 1000);
+
+        ArrayList<double[]> isochronePositions = Main.generateIsochrone(result);
 
         File testOutput = new File("/tmp/paint.txt");
         FileWriter writer = null;
         try {
             writer = new FileWriter(testOutput);
-            writer.write("POSITIONS rad=5 col=0,255,0,255\n");
+            writer.write("POLYGON col=0,255,0,100\n");
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        for (Crossing crossing : crossings.values()) {
+        /*for (Crossing crossing : crossings.values()) {
+         try {
+         writer.write(String.format("%f,%f\n", crossing.getPosition().getLongitude(), crossing.getPosition().getLatitude()));
+         } catch (IOException ex) {
+         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         }*/
+        for (double[] point : isochronePositions) {
             try {
-                writer.write(String.format("%f,%f\n", crossing.getPosition().getLongitude(), crossing.getPosition().getLatitude()));
-            } catch (IOException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                writer.write(String.format("%f,%f\n", point[1], point[0]));
+            } catch(IOException ex) {
+                System.out.println("write geht nicht");
             }
         }
+        writer.close();
 
         File testOutput2 = new File("/tmp/paint_result.txt");
         FileWriter writer2 = null;
@@ -85,16 +99,11 @@ public class Main {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        writer2.close();
+
 
         db.closeConnection();
-        
-        long shortest = findStartCrossing(new LatLongPosition(49.458167, 11.10222), crossings);
-        
-        // Debug output
-        LatLongPosition shortestPos = crossings.get(shortest).getPosition();
-        System.out.println("Start Crossing: " + shortest + " / Position: " + shortestPos.getLatitude() + "/" + shortestPos.getLongitude());
-        
-        
+
     }
 
     /**
@@ -103,7 +112,7 @@ public class Main {
      * @param position
      * @param time	time in minutes
      * @param speed	speed in km/h
-     * @return [0]=northWest [1]=southEast
+     * @return rectangular areabox with the position as center
      */
     public static AreaBox getAreaBox(LatLongPosition position, int time, int speed) {
         double meters = (speed * 1000.0) * (time / 60.0);
@@ -118,32 +127,49 @@ public class Main {
 
         return new AreaBox(pos1, pos2);
     }
-    
+
     /**
      * Finds nearest crossing id for a given position
-     * @param position		start position for the search
-     * @param crossings		ArrayList of all crossings
-     * @return				crossing id
+     *
+     * @param position	start position for the search
+     * @param crossings	ArrayList of all crossings
+     * @return	crossing
      */
-    public static long findStartCrossing(LatLongPosition position, Map<Long, Crossing> crossings) {
-    	Set<Long> keys = crossings.keySet();
-    	Iterator<Long> iter = keys.iterator();
-    	double dist = Double.POSITIVE_INFINITY;
-		long shortest = -1;
-		
-    	while(iter.hasNext()) {
-    		long key = iter.next();
-    		
-    		// Squared Euclidean distance
-    		double dlat = position.getLatitude() - crossings.get(key).getPosition().getLatitude();
-        	double dlong = position.getLongitude() - crossings.get(key).getPosition().getLongitude();
-        	double newDist = dlat * dlat + dlong * dlong;
-        	
-        	if(newDist < dist){
-        		dist = newDist;
-        		shortest = key;
-        	}
-    	}
-    	return shortest;
+    public static Crossing findStartCrossing(LatLongPosition position, Map<Long, Crossing> crossings) {
+        Set<Long> keys = crossings.keySet();
+        Iterator<Long> iter = keys.iterator();
+        double dist = Double.POSITIVE_INFINITY;
+        long shortest = -1;
+
+        while (iter.hasNext()) {
+            long key = iter.next();
+
+            // Squared Euclidean distance
+            double dlat = position.getLatitude() - crossings.get(key).getPosition().getLatitude();
+            double dlong = position.getLongitude() - crossings.get(key).getPosition().getLongitude();
+            double newDist = dlat * dlat + dlong * dlong;
+
+            if (newDist < dist) {
+                dist = newDist;
+                shortest = key;
+            }
+        }
+        return crossings.get(shortest);
+    }
+
+    /**
+     * generates the isochrone
+     *
+     * @param the crossings inside the isochrone
+     * @return the isochrone line
+     */
+    public static ArrayList<double[]> generateIsochrone(Set<Crossing> crossings) {
+        ArrayList<double[]> pointsList = new ArrayList<double[]>();
+        for (Crossing c : crossings) {
+            LatLongPosition pos = c.getPosition();
+            pointsList.add(new double[]{pos.getLatitude(), pos.getLongitude()});
+        }
+
+        return ConcaveHullGenerator.concaveHull(pointsList, 100);
     }
 }
