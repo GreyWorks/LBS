@@ -1,6 +1,12 @@
 
 import fu.geo.LatLongPosition;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -81,6 +87,14 @@ public class Main {
         }
 
         db.closeConnection();
+        
+        long shortest = findStartCrossing(new LatLongPosition(49.458167, 11.10222), crossings);
+        
+        // Debug output
+        LatLongPosition shortestPos = crossings.get(shortest).getPosition();
+        System.out.println("Start Crossing: " + shortest + " / Position: " + shortestPos.getLatitude() + "/" + shortestPos.getLongitude());
+        
+        
     }
 
     /**
@@ -103,5 +117,33 @@ public class Main {
                 fu.geo.Spherical.longitudeEastOf(lat, lon, meters));
 
         return new AreaBox(pos1, pos2);
+    }
+    
+    /**
+     * Finds nearest crossing id for a given position
+     * @param position		start position for the search
+     * @param crossings		ArrayList of all crossings
+     * @return				crossing id
+     */
+    public static long findStartCrossing(LatLongPosition position, Map<Long, Crossing> crossings) {
+    	Set<Long> keys = crossings.keySet();
+    	Iterator<Long> iter = keys.iterator();
+    	double dist = Double.POSITIVE_INFINITY;
+		long shortest = -1;
+		
+    	while(iter.hasNext()) {
+    		long key = iter.next();
+    		
+    		// Squared Euclidean distance
+    		double dlat = position.getLatitude() - crossings.get(key).getPosition().getLatitude();
+        	double dlong = position.getLongitude() - crossings.get(key).getPosition().getLongitude();
+        	double newDist = dlat * dlat + dlong * dlong;
+        	
+        	if(newDist < dist){
+        		dist = newDist;
+        		shortest = key;
+        	}
+    	}
+    	return shortest;
     }
 }
