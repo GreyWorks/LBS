@@ -50,7 +50,7 @@ public class Main {
         System.out.println("nachher");
         Crossing startCrossing = Main.findStartCrossing(startPosition, crossings);
 
-        ReachableAlgo algo = new MyAlgo();
+        ReachableAlgo algo = new DijkstraAlgo();
         long startTime = System.nanoTime();
         System.out.println("startalgo");
         Set<Crossing> result = algo.calculate(crossings.values(), links.values(), startCrossing, 400);
