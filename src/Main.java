@@ -170,6 +170,6 @@ public class Main {
             pointsList.add(new double[]{pos.getLatitude(), pos.getLongitude()});
         }
 
-        return ConcaveHullGenerator.concaveHull(pointsList, 100);
+        return ConcaveHullGenerator.concaveHull(pointsList, 0.005);
     }
 }
