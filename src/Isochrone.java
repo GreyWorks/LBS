@@ -88,8 +88,8 @@ public class Isochrone {
      * Finds nearest crossing id for a given position
      *
      * @param position	start position for the search
-     * @param crossings	ArrayList of all crossings
-     * @return	crossing
+     * @param crossings	ArrayList of the crossings to search through
+     * @return	the crossing which is nearest to given position
      */
     private static Crossing findStartCrossing(LatLongPosition position, Map<Long, Crossing> crossings) {
         Set<Long> keys = crossings.keySet();
@@ -100,7 +100,7 @@ public class Isochrone {
         while (iter.hasNext()) {
             long key = iter.next();
 
-            // Squared Euclidean distance
+            // Squared Euclidean distance, suits for small distances
             double dlat = position.getLatitude() - crossings.get(key).getPosition().getLatitude();
             double dlong = position.getLongitude() - crossings.get(key).getPosition().getLongitude();
             double newDist = dlat * dlat + dlong * dlong;
