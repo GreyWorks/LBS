@@ -3,15 +3,11 @@ import fu.geo.LatLongPosition;
 import fu.util.ConcaveHullGenerator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
