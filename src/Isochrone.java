@@ -14,6 +14,7 @@ public class Isochrone {
             String dbpasswd, String dbname) throws Exception {
 
         this.dataBase = new Database(dbhost, dbport, dbuser, dbpasswd, dbname);
+        LSISpeed.init();
     }
 
     public ArrayList<double[]> computeIsochrone(
@@ -22,12 +23,10 @@ public class Isochrone {
             int minutes) throws Exception {
         long startTime;
 
-        this.dataBase.openConnection();
-
-        LSISpeed.init();
+        this.dataBase.openConnection(); 
 
         LatLongPosition startPosition = new LatLongPosition(latitude, longitude);
-        AreaBox areaBox = getAreaBox(startPosition, minutes, 100);
+        AreaBox areaBox = getAreaBox(startPosition, minutes, LSISpeed.getMaxSpeed());
 
         System.out.println("Daten holen ...");
         System.out.println("Kreuzungen holen ...");

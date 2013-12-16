@@ -5,9 +5,8 @@ import java.util.Map;
 public class LSISpeed {
 
     static Map<Integer, Integer> lsiSpeedMap = new HashMap<Integer, Integer>();
-    
+
     private LSISpeed() {
-        
     }
 
     public static void init() {
@@ -32,8 +31,18 @@ public class LSISpeed {
         lsiSpeedMap.put(new Integer(34175000), new Integer(30)); // Anschlussstelle (tertiaer)
         lsiSpeedMap.put(new Integer(34176000), new Integer(20)); // kreisverkehr
     }
-    
+
     public static int getSpeedById(int id) {
         return LSISpeed.lsiSpeedMap.get(new Integer(id));
+    }
+
+    public static int getMaxSpeed() {
+        int maxSpeed = 0;
+        for (Integer speed : lsiSpeedMap.values()) {
+            if (speed > maxSpeed) {
+                maxSpeed = speed;
+            }
+        }
+        return maxSpeed;
     }
 }
