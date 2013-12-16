@@ -75,7 +75,7 @@ public class Database {
                 long db_id = resultSet.getLong(1);
                 double db_lat = resultSet.getDouble(3);
                 double db_long = resultSet.getDouble(2);
-                crossings.put(new Long(db_id), new Crossing(db_lat, db_long));
+                crossings.put(db_id, new Crossing(db_lat, db_long));
             }
 
             resultSet.close();
@@ -109,7 +109,7 @@ public class Database {
                 int db_maxspeed = resultSet.getInt(7);
                 // keine Einbahnstrassen und nur Autostrassen hinzufuegen
                 if (!db_tag.equalsIgnoreCase("C") && (db_lsiClass / 100000 == 341)) {
-                    links.put(new Long(db_id), new Link(db_crossingFrom, db_crossingTo, db_meters, db_lsiClass, db_maxspeed));
+                    links.put(db_id, new Link(db_crossingFrom, db_crossingTo, db_meters, db_lsiClass, db_maxspeed));
                 }
             }
 

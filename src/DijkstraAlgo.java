@@ -14,6 +14,7 @@ public class DijkstraAlgo implements ReachableAlgo {
 
         List<Crossing> openList = new ArrayList<Crossing>();
 
+        // mit dem größt möglichen Wert initialisieren => unendliche Kosten
         for (Crossing crossing : crossings) {
             crossing.setRemainingTime(Double.POSITIVE_INFINITY);
         }
