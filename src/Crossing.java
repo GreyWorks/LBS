@@ -3,24 +3,22 @@ import fu.geo.LatLongPosition;
 import java.util.ArrayList;
 
 public class Crossing implements Comparable<Crossing> {
+
     private LatLongPosition position;
-    
     /**
      * bool used in algorithm to signal if crossing was already visited
      */
     private boolean visited;
-    
-    private double remainingTime;
-    
+    private double costs;
     public ArrayList<Link> outgoingLinks;
-        
+
     public Crossing(double latitude, double longtitude) {
         this.position = new LatLongPosition(latitude, longtitude);
         this.outgoingLinks = new ArrayList<Link>();
         this.visited = false;
     }
-    
-    public Crossing (LatLongPosition position) {
+
+    public Crossing(LatLongPosition position) {
         this.position = new LatLongPosition(position);
     }
 
@@ -46,30 +44,27 @@ public class Crossing implements Comparable<Crossing> {
     }
 
     /**
-     * @return the remainingTime
+     * @return the costs
      */
-    public double getRemainingTime() {
-        return remainingTime;
+    public double getCosts() {
+        return costs;
     }
 
     /**
-     * @param remainingTime the remainingTime to set
+     * @param costs the costs to set
      */
-    public void setRemainingTime(double remainingTime) {
-        this.remainingTime = remainingTime;
+    public void setCosts(double costs) {
+        this.costs = costs;
     }
 
     @Override
     public int compareTo(Crossing o) {
-        if(this.getRemainingTime() < o.getRemainingTime()) {
+        if (this.getCosts() < o.getCosts()) {
             return -1;
-        }
-        else if (this.getRemainingTime() > o.getRemainingTime()) {
+        } else if (this.getCosts() > o.getCosts()) {
             return 1;
-        }
-        else {
+        } else {
             return 0;
         }
     }
-
 }

@@ -16,29 +16,32 @@ public class DijkstraAlgo implements ReachableAlgo {
 
         // mit dem größt möglichen Wert initialisieren => unendliche Kosten
         for (Crossing crossing : crossings) {
-            crossing.setRemainingTime(Double.POSITIVE_INFINITY);
+            crossing.setCosts(Double.POSITIVE_INFINITY);
         }
 
-        startCrossing.setRemainingTime(0);
+        startCrossing.setCosts(0);
 
         openList.add(startCrossing);
         /*-------------------------------------------------*/
 
 
         while (!openList.isEmpty()) {
-            Crossing currentCrossing = openList.get(0);
-            resultSet.add(currentCrossing);
-            openList.remove(0);
+            // das erste Element in der OpenListe hat die geringsten Kosten
+            Crossing currentCrossing = openList.remove(0);
+            resultSet.add(currentCrossing);     
 
             for (Link l : currentCrossing.outgoingLinks) {
-                double newRemainingTime = currentCrossing.getRemainingTime() + l.getTime();
-                if (newRemainingTime < l.getTargetCrossing().getRemainingTime()) {
-                    l.getTargetCrossing().setRemainingTime(newRemainingTime);
+                double newCosts = currentCrossing.getCosts() + l.getTime();
+                // neue Kosten setzen wenn sie geringer sind als bisherige
+                if (newCosts < l.getTargetCrossing().getCosts()) {
+                    l.getTargetCrossing().setCosts(newCosts);
                 }
-                if (l.getTargetCrossing().getRemainingTime() <= time) {
+                // nur wenn Kosten noch im Bereich sind zur OpenListe hinzufügen
+                if (l.getTargetCrossing().getCosts() <= time) {
                     if (!l.getTargetCrossing().wasVisited()) {
                         l.getTargetCrossing().setVisited(true);
                         openList.add(l.getTargetCrossing());
+                        // liste nach Kosten sortieren
                         Collections.sort(openList);
                     }
                 }

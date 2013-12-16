@@ -10,7 +10,7 @@ public class MyAlgo implements ReachableAlgo{
         HashSet<Crossing> newOpenList;
         HashSet<Crossing> openList = new HashSet<Crossing>();
 
-        startCrossing.setRemainingTime(time);
+        startCrossing.setCosts(time);
         startCrossing.setVisited(true);
 
         openList.add(startCrossing);
@@ -19,18 +19,18 @@ public class MyAlgo implements ReachableAlgo{
             for (Crossing openCrossing : openList) {
                 for (Link link : openCrossing.outgoingLinks) {
                     if (!link.getTargetCrossing().wasVisited()) {
-                        if (openCrossing.getRemainingTime() - link.getTime() < 0) {
+                        if (openCrossing.getCosts() - link.getTime() < 0) {
                             resultList.add(openCrossing);
                         } else {
-                            link.getTargetCrossing().setRemainingTime(openCrossing.getRemainingTime() - link.getTime());
+                            link.getTargetCrossing().setCosts(openCrossing.getCosts() - link.getTime());
                             link.getTargetCrossing().setVisited(true);
                             newOpenList.add(link.getTargetCrossing());
                             resultList.add(link.getTargetCrossing()); // punkte in der mitte werden auch addiert
                         }
                     } else {
-                        if (link.getTargetCrossing().getRemainingTime() < openCrossing.getRemainingTime() - link.getTime()) {
+                        if (link.getTargetCrossing().getCosts() < openCrossing.getCosts() - link.getTime()) {
                             //update
-                            link.getTargetCrossing().setRemainingTime(openCrossing.getRemainingTime() - link.getTime());
+                            link.getTargetCrossing().setCosts(openCrossing.getCosts() - link.getTime());
 
                             //den durchgang nochmal neu machen, solange bis kein schnellerer weg mehr gefunden wird
                             
