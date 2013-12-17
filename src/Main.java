@@ -11,6 +11,11 @@ public class Main {
         String dbpasswd = "dbuser";
         ArrayList<double[]> isochronePositions= null;
         Isochrone iso = null;
+        
+        if (args.length < 5) {
+            System.out.println("zu wenig Parameter");
+            System.exit(1);
+        }
 
         try {
         iso = new Isochrone(args[0], dbport, dbuser, dbpasswd, args[1]);
