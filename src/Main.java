@@ -1,12 +1,9 @@
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main {
+    private static final String filename = "isochrone.txt";
 
     public static void main(String[] args) throws IOException {
         int dbport = 5432;
@@ -24,25 +21,15 @@ public class Main {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
-        File testOutput = new File("/tmp/paint.txt");
-        FileWriter writer = null;
+        
         try {
-            writer = new FileWriter(testOutput);
-            writer.write("POLYGON col=0,255,0,100\n");
-        } catch (IOException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            DorendaOutput out = new DorendaOutput(filename);
+            out.write(isochronePositions);
+            out.close();
         }
-
-        for (double[] point : isochronePositions) {
-            try {
-                writer.write(String.format("%f,%f\n", point[1], point[0]));
-            } catch (IOException ex) {
-                System.out.println("write geht nicht");
-            }
-        }
-        writer.close();
-
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }     
 
         iso.exit();
     }
