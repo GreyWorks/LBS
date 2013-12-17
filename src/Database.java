@@ -22,6 +22,9 @@ public class Database {
         this.dbName = dbName;
     }
 
+    /**
+     * öffnet die Verbindung zu Datenbank, anschließend können Anfragen gestartet werden
+     */
     public void openConnection() {
         try {
             // Zugang zur Datenbank einrichten 
@@ -36,6 +39,9 @@ public class Database {
         }
     }
 
+    /**
+     * schließt die Verbindung zu Datenbank
+     */
     public void closeConnection() {
         try {
             this.connection.close();
@@ -46,6 +52,11 @@ public class Database {
         }
     }
 
+    /**
+     * schickt eine Anfrage an die Datenbank und liefert das Ergebnis
+     * @param queryString die SQL Query
+     * @return die Ergebnisse der Abfrage
+     */
     private ResultSet query(String queryString) {
         try {
             Statement statement = connection.createStatement();
@@ -60,6 +71,11 @@ public class Database {
         }
     }
 
+    /**
+     * Liefert die Kreuzungen in einem bestimmten geographischen Bereich
+     * @param box der Bereich in dem die Kreuzungen geholt werden sollen
+     * @return eine HashMap mit DatenbankID-Kreuzungen Einträgen
+     */
     public Map<Long, Crossing> getCrossings(AreaBox box) {
         String queryString;
         ResultSet resultSet = null;
@@ -88,6 +104,11 @@ public class Database {
         return crossings;
     }
 
+    /**
+     * Liefert die Verbindungen in einem bestimmten geographischen Bereich
+     * @param box der Bereich in dem die Verbindungen geholt werden sollen
+     * @return eine HashMap mit DatenbankID-Verbindungen Einträgen
+     */
     public Map<Long, Link> getLinks(AreaBox box) {
         String queryString;
         ResultSet resultSet = null;
