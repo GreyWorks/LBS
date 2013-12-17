@@ -3,7 +3,7 @@ import java.util.Collection;
 import java.util.Set;
 
 
-public interface ReachableAlgo {
+public interface IsochroneAlgo {
     /**
      * berechnet alle erreichbaren Kreuzungen in der Zeit time vom Startpunkt startCrossing
      * @param crossings alle Kreuzungen die potentiell erreicht werden könnten

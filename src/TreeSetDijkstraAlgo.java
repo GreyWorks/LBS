@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TreeSetDijkstraAlgo implements ReachableAlgo {
+public class TreeSetDijkstraAlgo implements IsochroneAlgo {
 
     @Override
     public Set<Crossing> calculate(Collection<Crossing> crossings, Collection<Link> links, Crossing startCrossing, double time) {
@@ -21,12 +21,11 @@ public class TreeSetDijkstraAlgo implements ReachableAlgo {
         startCrossing.setCosts(0);
 
         openList.add(startCrossing);
-        /*-------------------------------------------------*/
 
         while (!openList.isEmpty()) {
-            // das erste Element holen
+            // das erste Element holen und löschen
             Crossing currentCrossing = openList.pollFirst();
-            resultSet.add(currentCrossing);   
+            resultSet.add(currentCrossing);
 
             for (Link l : currentCrossing.outgoingLinks) {
                 double newCosts = currentCrossing.getCosts() + l.getTime();
@@ -43,7 +42,6 @@ public class TreeSetDijkstraAlgo implements ReachableAlgo {
                 }
             }
         }
-
         return resultSet;
     }
 }

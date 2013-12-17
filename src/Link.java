@@ -7,17 +7,18 @@ public class Link {
     private Crossing to;
     private long from_id;
     private long to_id;
-    // TODO length und speed muss nicht unbedingt gespeichert werden, time reicht aus
-    /**
-     * in meters
-     */
     private int length;
     private int speed;
-    /**
-     * in seconds
-     */
     private double time;
 
+    /**
+     *
+     * @param from_id Id der Startkreuzung
+     * @param to_id Id der Zielkreuzung
+     * @param length geometrische Länge in Metern
+     * @param lsiclass die LSIClass
+     * @param maxspeed Geschwindigkeitsbegrenzung, 0 falls keine vorhanden
+     */
     public Link(long from_id, long to_id, int length, int lsiclass, int maxspeed) {
         this.from_id = from_id;
         this.to_id = to_id;
@@ -39,6 +40,12 @@ public class Link {
         this.time = (double) this.length / (double) (this.speed * 1000 / 60 / 60);
     }
 
+    /**
+     * sucht die angrenzenden Kreuzungen (Start und Ziel) in crossings und
+     * speichert die Referenzen
+     *
+     * @param crossings
+     */
     public void setCrossingReferences(Map<Long, Crossing> crossings) {
         this.from = crossings.get(new Long(from_id));
         this.to = crossings.get(new Long(to_id));
@@ -46,14 +53,14 @@ public class Link {
     }
 
     /**
-     * @return the time
+     * @return die für diese Verbindung benötigte Zeit
      */
     public double getTime() {
         return time;
     }
 
     /**
-     * @return the to
+     * @return die Zielkreuzung der Verbindung
      */
     public Crossing getTargetCrossing() {
         return to;

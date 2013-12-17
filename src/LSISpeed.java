@@ -9,6 +9,9 @@ public class LSISpeed {
     private LSISpeed() {
     }
 
+    /**
+     * setzt alle die Geschwindigkeiten für die verschiedenen Straßentypen
+     */
     public static void init() {
         lsiSpeedMap.put(new Integer(34110000), new Integer(110)); // autobahn
         lsiSpeedMap.put(new Integer(34120000), new Integer(90)); // kraftfahrstrasse
@@ -32,10 +35,20 @@ public class LSISpeed {
         lsiSpeedMap.put(new Integer(34176000), new Integer(20)); // kreisverkehr
     }
 
+    /**
+     * liefert die Geschwindigkeit anhand der LSIClass-ID
+     *
+     * @param id
+     * @return
+     */
     public static int getSpeedById(int id) {
         return LSISpeed.lsiSpeedMap.get(new Integer(id));
     }
 
+    /**
+     *
+     * @return die Geschwindigkeit auf der schnellsten Straße
+     */
     public static int getMaxSpeed() {
         int maxSpeed = 0;
         for (Integer speed : lsiSpeedMap.values()) {

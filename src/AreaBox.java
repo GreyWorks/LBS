@@ -2,7 +2,7 @@
 import java.util.Locale;
 import fu.geo.LatLongPosition;
 
-/*
+/**
  * besteht aus zwei Positionen um ein "Rechteck" zu beschreiben
  */
 public class AreaBox {
@@ -46,8 +46,8 @@ public class AreaBox {
     }
 
     /**
-     * @return ein Eckpunkt der Box mit jeweils den größeren Lat und Long
-     * Werten in Deutschland: oben rechts
+     * @return ein Eckpunkt der Box mit jeweils den größeren Lat und Long Werten
+     * in Deutschland: oben rechts
      */
     public LatLongPosition getPosLargeValues() {
         return posLargeValues;
@@ -55,9 +55,10 @@ public class AreaBox {
 
     /**
      * erzeugt aus den Werten ein SQL-BETWEEN Statement
+     *
      * @param long_name der Spaltenname des Longtitude-Wertes in der DB
      * @param lat_name der Spaltenname des Latitude-Wertes in der DB
-     * @return 
+     * @return
      */
     public String getSqlBetweenStatement(String long_name, String lat_name) {
         return String.format(Locale.ENGLISH, " %s BETWEEN %.16f AND %.16f AND %s BETWEEN %.16f AND %.16f",

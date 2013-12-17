@@ -20,6 +20,7 @@ public class Main {
                 Integer.valueOf(args[4]));
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.exit(1);
         }
         
         try {
@@ -29,6 +30,7 @@ public class Main {
         }
         catch (Exception ex) {
             ex.printStackTrace();
+            System.exit(1);
         }     
 
         iso.exit();

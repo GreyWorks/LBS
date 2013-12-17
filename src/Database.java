@@ -23,14 +23,14 @@ public class Database {
     }
 
     /**
-     * öffnet die Verbindung zu Datenbank, anschließend können Anfragen gestartet werden
+     * öffnet die Verbindung zu Datenbank, anschließend können Anfragen
+     * gestartet werden
      */
     public void openConnection() {
         try {
-            // Zugang zur Datenbank einrichten 
             String connectionString = "jdbc:postgresql://" + this.host + ":" + this.port + "/" + this.dbName;
             this.connection = DriverManager.getConnection(connectionString, this.user, this.password);
-            this.connection.setAutoCommit(false);  //Getting results based on a cursor
+            this.connection.setAutoCommit(false);
             LSIClassCentreDB.initFromDB(this.connection);
         } catch (Exception e) {
             System.out.println("Error initialising DB access: " + e.toString());
@@ -54,6 +54,7 @@ public class Database {
 
     /**
      * schickt eine Anfrage an die Datenbank und liefert das Ergebnis
+     *
      * @param queryString die SQL Query
      * @return die Ergebnisse der Abfrage
      */
@@ -61,7 +62,7 @@ public class Database {
         try {
             Statement statement = connection.createStatement();
             statement.setFetchSize(5000);
-            
+
             return statement.executeQuery(queryString);
         } catch (SQLException e) {
             System.out.println("Error query DB: " + e.toString());
@@ -73,6 +74,7 @@ public class Database {
 
     /**
      * Liefert die Kreuzungen in einem bestimmten geographischen Bereich
+     *
      * @param box der Bereich in dem die Kreuzungen geholt werden sollen
      * @return eine HashMap mit DatenbankID-Kreuzungen Einträgen
      */
@@ -106,6 +108,7 @@ public class Database {
 
     /**
      * Liefert die Verbindungen in einem bestimmten geographischen Bereich
+     *
      * @param box der Bereich in dem die Verbindungen geholt werden sollen
      * @return eine HashMap mit DatenbankID-Verbindungen Einträgen
      */

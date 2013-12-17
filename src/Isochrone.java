@@ -18,9 +18,10 @@ public class Isochrone {
         this.dataBase = new Database(dbhost, dbport, dbuser, dbpasswd, dbname);
         LSISpeed.init();
     }
-    
+
     /**
      * Holt die Daten von der Datenbank und speichert sie in den Maps
+     *
      * @param areaBox die Daten werden nur in diesem Bereich geholt
      */
     private void fetchData(AreaBox areaBox) {
@@ -44,6 +45,16 @@ public class Isochrone {
         }
     }
 
+    /**
+     * berechnet die Isochrone
+     *
+     * @param latitude Latitude des Startpunktes
+     * @param longitude Longtitude des Startpunktes
+     * @param minutes die verfügbaren Minuten, für die der Umkreis berechnet
+     * werden soll
+     * @return alle erreichbaren Positionen
+     * @throws Exception
+     */
     public ArrayList<double[]> computeIsochrone(
             double latitude,
             double longitude,
@@ -55,12 +66,14 @@ public class Isochrone {
         LatLongPosition startPosition = new LatLongPosition(latitude, longitude);
         AreaBox areaBox = getAreaBox(startPosition, minutes, LSISpeed.getMaxSpeed());
 
+        // Daten aus der Datenbank holen
         this.fetchData(areaBox);
+        // Kreuzungen und Verbindungen verknüpfen, vereinfacht den Algorithmus
         this.prepareData();
 
-        Crossing startCrossing = this.findStartCrossing(startPosition);
+        Crossing startCrossing = this.findNearestCrossing(startPosition);
 
-        ReachableAlgo algo = new TreeSetDijkstraAlgo();
+        IsochroneAlgo algo = new TreeSetDijkstraAlgo();
 
         startTime = System.nanoTime();
         System.out.println("berechnen ...");
@@ -71,7 +84,7 @@ public class Isochrone {
         System.out.println("Isochrone berechnen ...");
         ArrayList<double[]> isochronePoints = this.generateIsochrone(result);
         System.out.println("done! elapsed time (milliseconds):" + (System.nanoTime() - startTime) / 1000 / 1000);
-        
+
         return isochronePoints;
     }
 
@@ -80,12 +93,12 @@ public class Isochrone {
     }
 
     /**
-     * Calculates the bounding edge points for an area around a point
+     * Berechnet die Eckpunkte eines Rechtecks für eine Fläche um einen Punkt
      *
      * @param position
-     * @param time	time in minutes
-     * @param speed	speed in km/h
-     * @return rectangular areabox with the position as center
+     * @param time	Zeit in Minuten
+     * @param speed	Geschwindigkeit in km/h
+     * @return rechteckige Box mit der position als Zentrum
      */
     private AreaBox getAreaBox(LatLongPosition position, int time, int speed) {
         double meters = (speed * 1000.0) * (time / 60.0);
@@ -102,12 +115,12 @@ public class Isochrone {
     }
 
     /**
-     * Finds nearest crossing id for a given position
+     * findet die nächste Kreuzung zur angegebenen Position
      *
-     * @param position	start position for the search
-     * @return	the crossing which is nearest to given position
+     * @param position
+     * @return	die nächste Kreuzung zur angegebenen Position
      */
-    private Crossing findStartCrossing(LatLongPosition position) {
+    private Crossing findNearestCrossing(LatLongPosition position) {
         Set<Long> keys = this.crossings.keySet();
         Iterator<Long> iter = keys.iterator();
         double dist = Double.POSITIVE_INFINITY;
@@ -116,7 +129,7 @@ public class Isochrone {
         while (iter.hasNext()) {
             long key = iter.next();
 
-            // Squared Euclidean distance, suits for small distances
+            // quadratischer euklidischer Abstand, ist für kleine Entfernungen genau genug
             double dlat = position.getLatitude() - this.crossings.get(key).getPosition().getLatitude();
             double dlong = position.getLongitude() - this.crossings.get(key).getPosition().getLongitude();
             double newDist = dlat * dlat + dlong * dlong;
@@ -130,10 +143,10 @@ public class Isochrone {
     }
 
     /**
-     * generates the isochrone
+     * erzeugt die Punkte für die Isochrone
      *
-     * @param the crossings inside the isochrone
-     * @return the isochrone line
+     * @param crossings die erreichbaren Kreuzungen
+     * @return die Punkte auf der Isochronen
      */
     private ArrayList<double[]> generateIsochrone(Set<Crossing> crossings) {
         ArrayList<double[]> pointsList = new ArrayList<double[]>();

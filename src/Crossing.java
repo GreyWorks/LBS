@@ -27,7 +27,8 @@ public class Crossing implements Comparable<Crossing> {
     }
 
     /**
-     * @return wird vom Algorithmus verwendet: gibt an ob die Kreuzung bereits "besucht" 
+     * @return wird vom Algorithmus verwendet: gibt an ob die Kreuzung bereits
+     * "besucht"
      */
     public boolean wasVisited() {
         return visited;
@@ -49,7 +50,9 @@ public class Crossing implements Comparable<Crossing> {
     }
 
     /**
-     * setzt die Kosten, die benötigt werden um vom Startpunkt zur aktuellen Kreuzung zu gelangen
+     * setzt die Kosten, die benötigt werden um vom Startpunkt zur aktuellen
+     * Kreuzung zu gelangen
+     *
      * @param costs
      */
     public void setCosts(double costs) {
@@ -58,8 +61,9 @@ public class Crossing implements Comparable<Crossing> {
 
     /**
      * vergleicht zwei Kreuzungen anhand der Kosten
+     *
      * @param o
-     * @return 
+     * @return
      */
     @Override
     public int compareTo(Crossing o) {
