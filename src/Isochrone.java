@@ -60,7 +60,7 @@ public class Isochrone {
 
         Crossing startCrossing = this.findStartCrossing(startPosition);
 
-        ReachableAlgo algo = new SortedSetDijkstraAlgo();
+        ReachableAlgo algo = new TreeSetDijkstraAlgo();
 
         startTime = System.nanoTime();
         System.out.println("berechnen ...");

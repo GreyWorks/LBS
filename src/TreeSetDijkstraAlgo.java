@@ -2,10 +2,9 @@
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class SortedSetDijkstraAlgo implements ReachableAlgo {
+public class TreeSetDijkstraAlgo implements ReachableAlgo {
 
     @Override
     public Set<Crossing> calculate(Collection<Crossing> crossings, Collection<Link> links, Crossing startCrossing, double time) {
@@ -24,12 +23,10 @@ public class SortedSetDijkstraAlgo implements ReachableAlgo {
         openList.add(startCrossing);
         /*-------------------------------------------------*/
 
-
         while (!openList.isEmpty()) {
             // das erste Element holen
             Crossing currentCrossing = openList.pollFirst();
             resultSet.add(currentCrossing);   
-            //openList.remove(currentCrossing);
 
             for (Link l : currentCrossing.outgoingLinks) {
                 double newCosts = currentCrossing.getCosts() + l.getTime();
