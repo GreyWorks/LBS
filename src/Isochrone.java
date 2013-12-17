@@ -67,9 +67,7 @@ public class Isochrone {
         Set<Crossing> result = algo.calculate(crossings.values(), links.values(), startCrossing, minutes * 60);
         System.out.println("done! elapsed time (milliseconds):" + (System.nanoTime() - startTime) / 1000 / 1000);
 
-        ArrayList<double[]> isochronePositions = this.generateIsochrone(result);
-
-        return new ArrayList<double[]>(isochronePositions);
+        return this.generateIsochrone(result);
     }
 
     public void exit() {
